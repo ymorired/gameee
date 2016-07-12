@@ -1,0 +1,49 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "authentication": {
+    "bucket": "yuichi-docker-test",
+    "key": "dockerhub-auth.json"
+  },
+  "volumes": [
+    {
+      "name": "nginx-conf",
+      "host": {
+        "sourcePath": "/var/app/current/nginx"
+      }
+    }
+  ],
+  "containerDefinitions": [
+    {
+      "name": "nginx-proxy",
+      "image": "nginx:latest",
+      "essential": true,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": [
+        "web"
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "nginx-conf",
+          "containerPath": "/etc/nginx/conf.d",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "awseb-logs-nginx-proxy",
+          "containerPath": "/var/log/nginx"
+        }
+      ]
+    },
+    {
+      "name": "web",
+      "image": "ymorired/test-private",
+      "essential": true,
+      "memory": 128
+    }
+  ]
+}

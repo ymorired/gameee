@@ -1,0 +1,20 @@
+# docker-compose.yml
+
+proxy:
+  image: nginx:latest
+  ports:
+  - "80:80"
+  volumes:
+  - ./nginx:/etc/nginx/conf.d:ro
+  links:
+  - web:web
+  - web2:web2
+  - web3:web3
+
+web:
+  build: .
+web2:
+  build: .
+web3:
+  build: .
+
